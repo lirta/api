@@ -17,14 +17,14 @@ class DB_Functions {
          
     }
  
-    public function simpanUser($name, $username, $email, $password) {
+    public function simpanUser($name, $username,  $email, $password) {
         $uuid = uniqid('', true);
         $hash = $this->hashSSHA($password);
         $encrypted_password = $hash["encrypted"]; // encrypted password
-        $salt = $hash["salt"]; // salt
+        // $salt = $hash["salt"]; // salt
  
-        $stmt = $this->conn->prepare("INSERT INTO tbl_user(unique_id, name, username, email, encrypted_password, salt) VALUES(?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $uuid, $name, $username, $email, $encrypted_password, $salt);
+        $stmt = $this->conn->prepare("INSERT INTO tbl_user(unique_id, name, username, email, encrypted_password) VALUES(?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $uuid, $name, $username,  $email, $encrypted_password);
         $result = $stmt->execute();
         $stmt->close();
  
@@ -56,9 +56,8 @@ class DB_Functions {
             $stmt->close();
  
             // verifikasi password user
-            $salt = $user['salt'];
             $encrypted_password = $user['encrypted_password'];
-            $hash = $this->checkhashSSHA($salt, $password);
+            $hash = $this->checkhashSSHA($password);
             // cek password jika sesuai
             if ($encrypted_password == $hash) {
                 // autentikasi user berhasil
@@ -100,9 +99,9 @@ class DB_Functions {
     public function hashSSHA($password) {
  
         $salt = sha1(rand());
-        $salt = substr($salt, 0, 10);
-        $encrypted = base64_encode(sha1($password . $salt, true) . $salt);
-        $hash = array("salt" => $salt, "encrypted" => $encrypted);
+        $salt = substr(0, 10);
+        $encrypted = base64_encode(sha1($password, true));
+        $hash = array( "encrypted" => $encrypted);
         return $hash;
     }
  
@@ -111,9 +110,9 @@ class DB_Functions {
      * @param salt, password
      * returns hash string
      */
-    public function checkhashSSHA($salt, $password) {
+    public function checkhashSSHA($password) {
  
-        $hash = base64_encode(sha1($password . $salt, true) . $salt);
+        $hash = base64_encode(sha1($password, true));
  
         return $hash;
     }
