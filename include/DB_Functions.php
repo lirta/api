@@ -52,16 +52,41 @@ class DB_Functions {
         $stmt->bind_param("s", $email);
  
         if ($stmt->execute()) {
-            $user = $stmt->get_result()->fetch_assoc();
+            $userm = $stmt->get_result()->fetch_assoc();
             $stmt->close();
  
-            // verifikasi password user
-            $encrypted_password = $user['encrypted_password'];
+            // verifikasi password userm
+            $encrypted_password = $userm['encrypted_password'];
             $hash = $this->checkhashSSHA($password);
             // cek password jika sesuai
             if ($encrypted_password == $hash) {
-                // autentikasi user berhasil
-                return $user;
+                // autentikasi userm berhasil
+                return $userm;
+            }
+        } else {
+            return NULL;
+        }
+    }
+    /**
+     * Get user berdasarkan username dan password
+     */
+    public function getUserByUsernameAndPassword($email, $password) {
+ 
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE username = ?");
+ 
+        $stmt->bind_param("s", $email);
+ 
+        if ($stmt->execute()) {
+            $useru = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+ 
+            // verifikasi password useru
+            $encrypted_password = $useru['encrypted_password'];
+            $hash = $this->checkhashSSHA($password);
+            // cek password jika sesuai
+            if ($encrypted_password == $hash) {
+                // autentikasi useru berhasil
+                return $useru;
             }
         } else {
             return NULL;
@@ -90,6 +115,25 @@ class DB_Functions {
             return false;
         }
     }
+
+    public function isUsername($username) {
+        $un = $this->conn->prepare("SELECT username from tbl_user WHERE username = ?");
+ 
+        $un->bind_param("s", $username);
+ 
+        $un->execute();
+ 
+        $un->store_result();
+ 
+        if ($un->num_rows > 0) {
+            // user telah ada 
+            $un->close();
+            return true;
+        } else {
+            $un->close();
+             return false;
+        }
+    }
  
     /**
      * Encrypting password
@@ -115,6 +159,54 @@ class DB_Functions {
         $hash = base64_encode(sha1($password, true));
  
         return $hash;
+    }
+
+
+    /**
+     * edit user name
+     */
+    // cek username
+    public function getUsername($username){
+        $stmt = $this->conn->prepare("SELECT username from tbl_user WHERE username = ?");
+ 
+        $stmt->bind_param("s", $username);
+ 
+        $stmt->execute();
+ 
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            // user telah ada 
+            $stmt->close();
+            return true;
+        } else {
+            // user belum ada 
+            $stmt->close();
+            return false;
+        }
+    }
+
+    // edit username
+    function editusername($username, $password){
+        $stmt = $this->conn->prepare("UPDATE INTO tbl_user SET username= '".$username."' WHERE email = '".$email."'");
+
+        // $stmt->bindparam("s", $username);
+        // $stmt->bindparam("s", $email);
+        $result = $stmt->excute();
+        $stmt->close();
+
+        if($result){
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE username=?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        }else{
+            return false;
+        }
+
     }
  
 }

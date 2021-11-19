@@ -13,20 +13,35 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
  
     // get the user by email and password
     // get user berdasarkan email dan password
-    $user = $db->getUserByEmailAndPassword($email, $password);
+    $userm = $db->getUserByEmailAndPassword($email, $password);
  
-    if ($user != false) {
-        // user ditemukan
+    if ($userm != false) {
+        // userm ditemukan
         $response["error"] = FALSE;
-        $response["uid"] = $user["unique_id"];
-        $response["user"]["name"] = $user["name"];
-        $response["user"]["email"] = $user["email"];
+        $response["uid"] = $userm["unique_id"];
+        $response["user"]["name"] = $userm["name"];
+        $response["user"]["username"] = $userm["username"];
+        $response["user"]["email"] = $userm["email"];
         echo json_encode($response);
     } else {
-        // user tidak ditemukan password/email salah
-        $response["error"] = TRUE;
-        $response["error_msg"] = "Login gagal. Password/Email salah";
-        echo json_encode($response);
+        // get user berdasarkan username
+        $useru = $db->getUserByUsernameAndPassword($email, $password);
+        
+        if ($useru != false) {
+            // useru ditemukan
+            $response["error"] = FALSE;
+            $response["uid"] = $useru["unique_id"];
+            $response["user"]["name"] = $useru["name"];
+            $response["user"]["username"] = $useru["username"];
+            $response["user"]["email"] = $useru["email"];
+            echo json_encode($response);
+        } else {
+            // get user berdasarkan username
+            $useru = $db->getUserByEmailAndPassword($email, $username);
+            $response["error"] = TRUE;
+            $response["error_msg"] = "Login gagal. Password,Email/username salah";
+            echo json_encode($response);
+        }
     }
 } else {
     $response["error"] = TRUE;

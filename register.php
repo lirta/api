@@ -4,8 +4,6 @@ require_once 'include/DB_Functions.php';
 $db = new DB_Functions();
  
 // json response array
-$response = array("error" => FALSE);
- echo json_encode($response); 
 if (isset($_POST['name']) && isset($_POST) && isset($_POST['email']) && isset($_POST['password'])) {
  
     // menerima parameter POST ( name, email, password )
@@ -14,11 +12,15 @@ if (isset($_POST['name']) && isset($_POST) && isset($_POST['email']) && isset($_
     $email = $_POST['email'];
     $password = $_POST['password'];
  
-    // Cek jika user ada dengan email yang sama
+    // Cek jika user ada dengan email dan username yang sama
     if ($db->isUserExisted($email)) {
         // user telah ada
         $response["error"] = TRUE;
         $response["error_msg"] = "User telah ada dengan email " . $email;
+        echo json_encode($response);
+    }else if($db->isUsername($username)){
+        $response["error"] = TRUE;
+        $response["error_msg"] = "User telah ada dengan username " . $username;
         echo json_encode($response);
     } else {
         // buat user baru
