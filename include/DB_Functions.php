@@ -188,7 +188,7 @@ class DB_Functions {
 
     // edit username
     function editusername($username, $password){
-        $stmt = $this->conn->prepare("UPDATE INTO tbl_user SET username= '".$username."' WHERE email = '".$email."'");
+        $stmt = $this->conn->prepare("UPDATE INTO tbl_user SET username='".$userm."' WHERE ");
 
         // $stmt->bindparam("s", $username);
         // $stmt->bindparam("s", $email);
