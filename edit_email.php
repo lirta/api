@@ -11,17 +11,14 @@ if (isset($_POST['username']) && isset($_POST['email'])){
     $email = $_POST['email'];
     
     //cek username
-    if($db->getUsername($username)){
+    if($db->getEmail($email)){
         $response["error"] = TRUE;
-        $response["error_ms"] = "Username sudah ada " . $username;
+        $response["error_ms"] = "email sudah ada " . $email;
         echo json_encode($response);
     }else{
         
-        $response["error"] = TRUE;
-        $response["error_ms"] = "Username edit";
         
-        
-        $user = $db->editusername($username ,$email);
+        $user = $db->editemail($username ,$email);
         
         
         if($user){

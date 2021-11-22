@@ -135,7 +135,140 @@ class DB_Functions {
         }
     }
  
+   
+
+
     /**
+     * edit user name
+     */
+    // cek username
+    public function getUsername($username){
+        $stmt = $this->conn->prepare("SELECT username from tbl_user WHERE username = ?");
+ 
+        $stmt->bind_param("s", $username);
+ 
+        $stmt->execute();
+ 
+        $stmt->store_result();
+        // return $username;
+
+        if ($stmt->num_rows > 0) {
+            // user telah ada 
+            $stmt->close();
+
+            return true;
+        } else {
+            // user belum ada 
+            $stmt->close();
+
+            return false;
+        }
+    }
+
+    // edit username
+    function editusername($username, $email){
+        $stmt = $this->conn->prepare("UPDATE  tbl_user SET username = ? WHERE email = ?");
+
+        $stmt->bind_param("ss",$username,$email);
+        $result = $stmt->execute();
+        $stmt->close();
+
+
+
+        if($result){
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        }else{
+            return false;
+        }
+
+    }
+ 
+    /**
+     * edit email
+     */
+    // cek email yg baru
+    public function getEmail($email){
+        $stmt = $this->conn->prepare("SELECT username from tbl_user WHERE email = ?");
+ 
+        $stmt->bind_param("s", $email);
+ 
+        $stmt->execute();
+ 
+        $stmt->store_result();
+        // return $username;
+
+        if ($stmt->num_rows > 0) {
+            // user telah ada 
+            $stmt->close();
+
+            return true;
+        } else {
+            // user belum ada 
+            $stmt->close();
+
+            return false;
+        }
+    }
+
+    // edit email
+    function editemail($username, $email){
+        $stmt = $this->conn->prepare("UPDATE  tbl_user SET email = ? WHERE username = ?");
+
+        $stmt->bind_param("ss",$email,$username);
+        $result = $stmt->execute();
+        $stmt->close();
+
+
+
+        if($result){
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function cekPassword($email, $password) {
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+ 
+        $stmt->bind_param("s", $email);
+ 
+        $stmt->execute();
+        $userm = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+ 
+        // verifikasi password userm
+        $encrypted_password = $userm['encrypted_password'];
+        $hash = $this->checkhashSSHA($password);
+        // cek password jika sesuai
+        if ($encrypted_password == $hash) {
+            
+            return $hash;
+        } else {
+            return FALSE;
+        }
+    }
+
+
+    public function updatePassword($email, $password) {}
+
+
+
+
+// =========================================================================
+     /**
      * Encrypting password
      * @param password
      * returns salt and encrypted password
@@ -159,54 +292,6 @@ class DB_Functions {
         $hash = base64_encode(sha1($password, true));
  
         return $hash;
-    }
-
-
-    /**
-     * edit user name
-     */
-    // cek username
-    public function getUsername($username){
-        $stmt = $this->conn->prepare("SELECT username from tbl_user WHERE username = ?");
- 
-        $stmt->bind_param("s", $username);
- 
-        $stmt->execute();
- 
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            // user telah ada 
-            $stmt->close();
-            return true;
-        } else {
-            // user belum ada 
-            $stmt->close();
-            return false;
-        }
-    }
-
-    // edit username
-    function editusername($username, $password){
-        $stmt = $this->conn->prepare("UPDATE INTO tbl_user SET username='".$userm."' WHERE ");
-
-        // $stmt->bindparam("s", $username);
-        // $stmt->bindparam("s", $email);
-        $result = $stmt->excute();
-        $stmt->close();
-
-        if($result){
-            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE username=?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $user = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-
-            return $user;
-        }else{
-            return false;
-        }
-
     }
  
 }
