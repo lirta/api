@@ -173,8 +173,6 @@ class DB_Functions {
         $result = $stmt->execute();
         $stmt->close();
 
-
-
         if($result){
             $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
             $stmt->bind_param("s", $email);
@@ -224,8 +222,6 @@ class DB_Functions {
         $result = $stmt->execute();
         $stmt->close();
 
-
-
         if($result){
             $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
             $stmt->bind_param("s", $email);
@@ -240,7 +236,7 @@ class DB_Functions {
 
     }
 
-    public function cekPassword($email, $oldpassword) {
+    public function cekPassword($email, $oldpassword, $passwordd) {
         $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
  
         $stmt->bind_param("s", $email);
@@ -255,38 +251,68 @@ class DB_Functions {
         $hash = $this->checkhashSSHA($password);
         // cek password jika sesuai
         if ($encrypted_password == $hash) {
-            
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
+            $password = $passwordd;
+            $hash = $this->hashSSHA($password);
+            $encrypted_password = $hash["encrypted"];
 
+            $stmt = $this->conn->prepare("UPDATE  tbl_user SET encrypted_password = ? WHERE email = ?");
 
-    public function updatePassword($email, $password) {
-        // $password = $newpassword;
-        $hash = $this->hashSSHA($password);
-        $encrypted_password = $hash["encrypted"];
-
-        $stmt = $this->conn->prepare("UPDATE  tbl_user SET encrypted_password = ? WHERE email = ?");
-
-        $stmt->bind_param("ss",$encrypted_password,$email);
-        $result = $stmt->execute();
-        $stmt->close();
-
-        if ($result) {
+            $stmt->bind_param("ss",$encrypted_password,$email);
+            $result = $stmt->execute();
+            $stmt->close();
+             if ($result) {
             $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
 
-            return $user;
+            return true;
         }else{
             return FALSE;
-            // return $encrypted_password;
+        }
+        } else {
+            return false;
         }
     }
+
+    public function getMember(){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+        
+        if ($stmt->execute()) {
+            $member[] = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            // $user[]=$member;
+            return $member;
+            # code...
+        }else{
+            return null;
+        }
+    }
+
+
+    // public function updatePassword($email, $password) {
+    //     $hash = $this->hashSSHA($password);
+    //     $encrypted_password = $hash["encrypted"];
+
+    //     $stmt = $this->conn->prepare("UPDATE  tbl_user SET encrypted_password = ? WHERE email = ?");
+
+    //     $stmt->bind_param("ss",$encrypted_password,$email);
+    //     $result = $stmt->execute();
+    //     $stmt->close();
+
+    //     if ($result) {
+    //         $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
+    //         $stmt->bind_param("s", $email);
+    //         $stmt->execute();
+    //         $user = $stmt->get_result()->fetch_assoc();
+    //         $stmt->close();
+
+    //         return true;
+    //     }else{
+    //         return FALSE;
+    //     }
+    // }
 
 
 
