@@ -290,6 +290,27 @@ class DB_Functions {
         }
     }
 
+    function editprofile($name, $email){
+        $stmt = $this->conn->prepare("UPDATE  tbl_user SET name = ? WHERE email = ?");
+
+        $stmt->bind_param("ss",$name,$email);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result){
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        }else{
+            return false;
+        }
+
+    }
+
 
     // public function updatePassword($email, $password) {
     //     $hash = $this->hashSSHA($password);
