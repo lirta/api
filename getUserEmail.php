@@ -4,14 +4,13 @@ $db = new DB_Functions();
  
 // json response array
 $response = array("error" => FALSE);
-
-if (isset($_POST['name']) && isset($_POST['email'])){
-    $name = $_POST['name'];
+ 
+if (isset($_POST['email'])) {
     $email = $_POST['email'];
-    $user = $db->editprofile($name ,$email);
-        
-        
-    if($user){
+    echo($email);
+    $user = $db->getUser($email,);
+    if ($user) {
+        // user ditemukan
         $response["error"] = FALSE;
         $response["uid"] = $user["unique_id"];
         $response["user"]["name"] = $user["name"];
@@ -19,9 +18,9 @@ if (isset($_POST['name']) && isset($_POST['email'])){
         $response["user"]["email"] = $user["email"];
         $response["user"]["gambar"] = $user["gambar"];
         echo json_encode($response);
-    }else{
-        $response["error"] =TRUE;
-        $response["error_mgs"] ="terjadi kesalahan";
-        echo json_encode($response);
+    } else {
+        $response["error"] = TRUE;
+            $response["error_msg"] = "gagal get user";
+            echo json_encode($response);
     }
 }

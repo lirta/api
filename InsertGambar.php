@@ -16,6 +16,7 @@
         if($result == 0) {
             $response['error'] = false; 
             $response['message'] = 'Gambar berhasil diupload';
+            $response['gambar'] = $namagambar.'.jpg';
              
             if(isset($_FILES['filegambar']['name']) && isset($_POST['email'])){
                 try{

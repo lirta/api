@@ -22,6 +22,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         $response["user"]["name"] = $userm["name"];
         $response["user"]["username"] = $userm["username"];
         $response["user"]["email"] = $userm["email"];
+        $response["user"]["gambar"] = $userm["gambar"];
         echo json_encode($response);
     } else {
         // get user berdasarkan username
@@ -34,6 +35,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             $response["user"]["name"] = $useru["name"];
             $response["user"]["username"] = $useru["username"];
             $response["user"]["email"] = $useru["email"];
+            $response["user"]["gambar"] = $userm["gambar"];
             echo json_encode($response);
         } else {
             // get user berdasarkan username

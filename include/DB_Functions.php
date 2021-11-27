@@ -310,6 +310,18 @@ class DB_Functions {
         }
 
     }
+    public function getUser($email){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        if ($stmt->execute()) {
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            return $user;
+            # code...
+        }else{
+            return null;
+        }
+    }
 
 
     // public function updatePassword($email, $password) {

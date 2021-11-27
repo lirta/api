@@ -32,7 +32,8 @@ $app ->get('/member', function() use($app, $db){
         $dosen['member'][] = array(
             'id' => $data['id'],
             'name' => $data['name'],
-            'username' => $data['username']
+            'username' => $data['username'],
+            'gambar' => $data['gambar']
             );
     }
     echo json_encode($dosen);
