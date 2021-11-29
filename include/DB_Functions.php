@@ -260,56 +260,15 @@ class DB_Functions {
             $stmt->bind_param("ss",$encrypted_password,$email);
             $result = $stmt->execute();
             $stmt->close();
-             if ($result) {
-            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $user = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-
             return true;
-        }else{
-            return FALSE;
-        }
         } else {
             return false;
         }
     }
 
-    public function getMember(){
-        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
-        
-        if ($stmt->execute()) {
-            $member[] = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-            // $user[]=$member;
-            return $member;
-            # code...
-        }else{
-            return null;
-        }
-    }
+    
 
-    function editprofile($name, $email){
-        $stmt = $this->conn->prepare("UPDATE  tbl_user SET name = ? WHERE email = ?");
-
-        $stmt->bind_param("ss",$name,$email);
-        $result = $stmt->execute();
-        $stmt->close();
-
-        if($result){
-            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $user = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-
-            return $user;
-        }else{
-            return false;
-        }
-
-    }
+    
     public function getUser($email){
         $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -356,6 +315,24 @@ class DB_Functions {
      * @param password
      * returns salt and encrypted password
      */
+
+    public function getMember(){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+        
+        if ($stmt->execute()) {
+            $member[] = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            // $user[]=$member;
+            return $member;
+            # code...
+        }else{
+            return null;
+        }
+    }
+
+
+
+
     public function hashSSHA($password) {
  
         $salt = sha1(rand());

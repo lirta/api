@@ -14,13 +14,19 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['newpass
     
     if ($pass = $db->cekPassword($email, $oldpassword,$passwordd)) {
         
-        
-        $response["error"] = true;
-        $response["error_msg"] = "update password succes";
-        echo json_encode($response);
+        if($user=$user = $db->getUser($email,)){
+            
+            $response["error"] = FALSE;
+            $response["uid"] = $user["unique_id"];
+            $response["user"]["name"] = $user["name"];
+            $response["user"]["username"] = $user["username"];
+            $response["user"]["email"] = $user["email"];
+            $response["user"]["gambar"] = $user["gambar"];
+            echo json_encode($response);
+        }
         // userm ditemukan
     } else {
-        $response["error"] = FALSE;
+        $response["error"] = true;
         $response["error_msg"] = "Password lama anda salah";
         echo json_encode($response);
     }

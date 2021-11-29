@@ -30,6 +30,7 @@ if (isset($_POST['username']) && isset($_POST['email'])){
             $response["user"]["name"] = $user["name"];
             $response["user"]["username"] = $user["username"];
             $response["user"]["email"] = $user["email"];
+            $response["user"]["gambar"] = $user["gambar"];
             echo json_encode($response);
         }else{
             $response["error"] =TRUE;
