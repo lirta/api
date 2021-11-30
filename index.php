@@ -6,17 +6,17 @@ use \Slim\App;
 
 $app = new App();
 
-// $dbhost = '127.0.0.1';
-// $dbuser = 'root';
-// $dbpass = '';
-// $dbname = 'project';
-// $dbmethod = 'mysql:dbname=';
-
 $dbhost = '127.0.0.1';
-$dbuser = 'qtsjtszxkx';
-$dbpass = 'nUUG5Ey3nP';
-$dbname = 'qtsjtszxkx';
+$dbuser = 'root';
+$dbpass = '';
+$dbname = 'project';
 $dbmethod = 'mysql:dbname=';
+
+// $dbhost = '127.0.0.1';
+// $dbuser = 'qtsjtszxkx';
+// $dbpass = 'nUUG5Ey3nP';
+// $dbname = 'qtsjtszxkx';
+// $dbmethod = 'mysql:dbname=';
 
 $dsn = $dbmethod.$dbname;
 $pdo = new PDO($dsn, $dbuser, $dbpass);
