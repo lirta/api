@@ -5,7 +5,6 @@
     $response = array(); 
      
     if($_SERVER['REQUEST_METHOD']=='POST'){
-        // $id = $_POST['id'];
         $email = $_POST['email'];
         $namagambar = substr(sha1(time()), 0, 16);;
          
