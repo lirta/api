@@ -9,11 +9,14 @@ if (isset($_POST['name']) && isset($_POST['email'])){
     $name = $_POST['name'];
     $email = $_POST['email'];
     $user = $db->editprofile($name ,$email);
-        
+    
+    // echo($name);
+    // echo($email);
         
     if($user){
         $response["error"] = FALSE;
         $response["uid"] = $user["unique_id"];
+        $response["user"]["id"] = $user["unique_id"];
         $response["user"]["name"] = $user["name"];
         $response["user"]["username"] = $user["username"];
         $response["user"]["email"] = $user["email"];
@@ -21,7 +24,7 @@ if (isset($_POST['name']) && isset($_POST['email'])){
         echo json_encode($response);
     }else{
         $response["error"] =TRUE;
-        $response["error_mgs"] ="terjadi kesalahan";
+        $response["error_mgs"] ="Gagal edit profile";
         echo json_encode($response);
     }
 }

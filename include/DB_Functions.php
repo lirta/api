@@ -266,6 +266,29 @@ class DB_Functions {
         }
     }
 
+
+
+    public function editprofile($name , $email){
+        $stmt = $this->conn->prepare("UPDATE  tbl_user SET name = ? WHERE email = ?");
+
+        $stmt->bind_param("ss",$name,$email);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if($result){
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        }else{
+            return false;
+        }
+
+    }
+
     
 
     
@@ -280,6 +303,52 @@ class DB_Functions {
         }else{
             return null;
         }
+    }
+
+    public function insertDevice(
+        $androidId,
+        $device,
+        $deviceId,
+        $deviceType,
+        $deviceModel,
+        $deviceManufactur,
+        $deviceVersionSDK,
+        $deviceProduct,
+        $deviceHost,
+        $imei,
+        $lat,
+        $long
+    ){
+        $stmt = $this->conn->prepare("INSERT INTO tbl_device(
+            androidId,
+            device,
+            deviceId,
+            deviceType,
+            deviceModel,
+            deviceManufactur,
+            deviceVersionSDK,
+            deviceProduct,
+            deviceHost,imei,locationLat,locationLong
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssssssssss", 
+                                    $androidId,
+                                    $device,
+                                    $deviceId,
+                                    $deviceType,
+                                    $deviceModel,
+                                    $deviceManufactur,
+                                    $deviceVersionSDK,
+                                    $deviceProduct,
+                                    $deviceHost,$imei,$lat,$long);
+        $result = $stmt->execute();
+        $stmt->close();
+        if ($result) {
+            # code...
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
 
