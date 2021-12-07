@@ -283,6 +283,51 @@ class DB_Functions {
     }
 
 
+    //insert Device
+
+    public function insertDevice(
+        $androidId,
+        $device,
+        $deviceId,
+        $deviceType,
+        $deviceModel,
+        $deviceManufactur,
+        $deviceVersionSDK,
+        $deviceProduct,
+        $deviceHost
+    ){
+        $stmt = $this->conn->prepare("INSERT INTO tbl_device(
+            androidId,
+            device,
+            deviceId,
+            deviceType,
+            deviceModel,
+            deviceManufactur,
+            deviceVersionSDK,
+            deviceProduct,
+            deviceHost) VALUES(?, ?, ?, ?, ?, ? , ? , ? , ?)");
+        $stmt->bind_param("ssssss", 
+                                    $androidId,
+                                    $device,
+                                    $deviceId,
+                                    $deviceType,
+                                    $deviceModel,
+                                    $deviceManufactur,
+                                    $deviceVersionSDK,
+                                    $deviceProduct,
+                                    $deviceHost);
+        $result = $stmt->execute();
+        $stmt->close();
+        if ($result) {
+            # code...
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+
+
     // public function updatePassword($email, $password) {
     //     $hash = $this->hashSSHA($password);
     //     $encrypted_password = $hash["encrypted"];
