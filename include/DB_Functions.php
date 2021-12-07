@@ -352,6 +352,9 @@ class DB_Functions {
     }
 
 
+    //insert Device
+
+    
     // public function updatePassword($email, $password) {
     //     $hash = $this->hashSSHA($password);
     //     $encrypted_password = $hash["encrypted"];
