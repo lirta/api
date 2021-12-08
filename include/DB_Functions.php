@@ -305,6 +305,28 @@ class DB_Functions {
         }
     }
 
+    //device
+    //cek device
+    public function cekDevice($deviceId){
+        $stmt = $this->conn->prepare("SELECT deviceId from tbl_device WHERE deviceId = ?");
+ 
+        $stmt->bind_param("s", $deviceId);
+ 
+        $stmt->execute();
+ 
+        $stmt->store_result();
+ 
+        if ($stmt->num_rows > 0) {
+            // user telah ada 
+            $stmt->close();
+            return true;
+        } else {
+            // user belum ada 
+            $stmt->close();
+            return false;
+        }
+    }
+    //insert device
     public function insertDevice(
         $androidId,
         $device,
@@ -317,9 +339,11 @@ class DB_Functions {
         $deviceHost,
         $imei,
         $lat,
-        $long
+        $long,
+        $userId
     ){
         $stmt = $this->conn->prepare("INSERT INTO tbl_device(
+            id_user,
             androidId,
             device,
             deviceId,
@@ -328,9 +352,13 @@ class DB_Functions {
             deviceManufactur,
             deviceVersionSDK,
             deviceProduct,
-            deviceHost,imei,locationLat,locationLong
-            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("ssssssssssss", 
+            deviceHost,
+            imei,
+            locationLat,
+            locationLong
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("sssssssssssss", 
+                                    $userId,
                                     $androidId,
                                     $device,
                                     $deviceId,
@@ -339,7 +367,11 @@ class DB_Functions {
                                     $deviceManufactur,
                                     $deviceVersionSDK,
                                     $deviceProduct,
-                                    $deviceHost,$imei,$lat,$long);
+                                    $deviceHost,
+                                    $imei,
+                                    $lat,
+                                    $long
+                                    );
         $result = $stmt->execute();
         $stmt->close();
         if ($result) {
@@ -349,6 +381,61 @@ class DB_Functions {
             return false;
         }
         
+    }
+    //update device
+
+    public function updateDevice(
+        $androidId,
+            $device,
+            $deviceId,
+            $deviceType,
+            $deviceModel,
+            $deviceManufactur,
+            $deviceVersionSDK,
+            $deviceProduct,
+            $deviceHost,
+            $imei,
+            $lat,
+            $long,
+            $userId
+    ){
+        $stmt = $this->conn->prepare("UPDATE tbl_device SET
+            androidId= ?,
+            device = ?,
+            deviceType =?,
+            deviceModel = ?,
+            deviceManufactur=?,
+            deviceVersionSDK=?,
+            deviceProduct=?,
+            deviceHost=?,
+            imei=?,
+            locationLat=?,
+            locationLong=?,
+            id_user = ?
+            WHERE 
+            deviceId = ?");
+        $stmt->bind_param("sssssssssssss", 
+                                    $androidId,
+                                    $device,
+                                    $deviceType,
+                                    $deviceModel,
+                                    $deviceManufactur,
+                                    $deviceVersionSDK,
+                                    $deviceProduct,
+                                    $deviceHost,
+                                    $imei,
+                                    $lat,
+                                    $long,
+                                    $userId,
+                                    $deviceId);
+        $result = $stmt->execute();
+        $stmt->close();
+        if ($result) {
+            # code...
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
