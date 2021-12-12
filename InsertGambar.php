@@ -6,7 +6,7 @@
      
     if($_SERVER['REQUEST_METHOD']=='POST'){
         $email = $_POST['email'];
-        $namagambar = substr(sha1(time()), 0, 16);;
+        $namagambar = substr(sha1(time()), 0, 16);
          
         $db = new DbOperation(); 
  

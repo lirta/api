@@ -439,31 +439,46 @@ class DB_Functions {
     }
 
 
-    //insert Device
+    //login with google
 
+    public function cekEmailGoogle($email, $gambar, $name){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+ 
+        $stmt->bind_param("s", $email); 
+
+        if ($stmt->execute()) {
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+
+        }else{
+            return null;
+        }
+    }
+
+    public function save($email, $gambar, $name){
+            $uuid = uniqid('', true);
+            $stmt = $this->conn->prepare("INSERT INTO tbl_user(unique_id, name, username, email, gambar) VALUES(?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $uuid, $name, $email, $email, $gambar);
+            $result = $stmt->execute();
+            $stmt->close();
     
-    // public function updatePassword($email, $password) {
-    //     $hash = $this->hashSSHA($password);
-    //     $encrypted_password = $hash["encrypted"];
+            // cek jika sudah sukses
+            if ($result) {
+                $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $user = $stmt->get_result()->fetch_assoc();
+                $stmt->close();
+    
+                return $user;
+            } else {
+                return NULL;
+            }
+    }
 
-    //     $stmt = $this->conn->prepare("UPDATE  tbl_user SET encrypted_password = ? WHERE email = ?");
 
-    //     $stmt->bind_param("ss",$encrypted_password,$email);
-    //     $result = $stmt->execute();
-    //     $stmt->close();
-
-    //     if ($result) {
-    //         $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email=?");
-    //         $stmt->bind_param("s", $email);
-    //         $stmt->execute();
-    //         $user = $stmt->get_result()->fetch_assoc();
-    //         $stmt->close();
-
-    //         return true;
-    //     }else{
-    //         return FALSE;
-    //     }
-    // }
 
 
 
