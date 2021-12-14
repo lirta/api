@@ -291,15 +291,26 @@ class DB_Functions {
 
     
 
-    
-    public function getUser($email){
-        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+    // get user
+    public function getUserId($email){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE unique_id = ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
             return $user;
-            # code...
+        }else{
+            return null;
+        }
+    }
+    // get user
+    public function getUser($id){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE id = ?");
+        $stmt->bind_param("s", $id);
+        if ($stmt->execute()) {
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            return $user;
         }else{
             return null;
         }

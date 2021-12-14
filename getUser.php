@@ -5,14 +5,14 @@ $db = new DB_Functions();
 // json response array
 $response = array("error" => FALSE);
  
-if (isset($_POST['email'])) {
-    $email = $_POST['email'];
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
     // echo($email);
-    $user = $db->getUser($email);
+    $user = $db->getUserId($id);
     if ($user) {
         // user ditemukan
         $response["error"] = FALSE;
-        // $response["uid"] = $user["unique_id"];
+        $response["uid"] = $user["unique_id"];
         $response["user"]["id"] = $user["unique_id"];
         $response["user"]["name"] = $user["name"];
         $response["user"]["username"] = $user["username"];
