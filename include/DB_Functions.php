@@ -292,9 +292,9 @@ class DB_Functions {
     
 
     // get user
-    public function getUserId($email){
+    public function getUserId($id){
         $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE unique_id = ?");
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("s", $id);
         if ($stmt->execute()) {
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
@@ -304,9 +304,9 @@ class DB_Functions {
         }
     }
     // get user
-    public function getUser($id){
-        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE id = ?");
-        $stmt->bind_param("s", $id);
+    public function getUser($email){
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+        $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
@@ -339,49 +339,64 @@ class DB_Functions {
     }
     //insert device
     public function insertDevice(
-        $androidId,
-        $device,
-        $deviceId,
-        $deviceType,
-        $deviceModel,
-        $deviceManufactur,
-        $deviceVersionSDK,
-        $deviceProduct,
-        $deviceHost,
-        $imei,
-        $lat,
-        $long,
-        $userId
+                $userId,
+                $deviceId,
+                $deviceOsType,
+                $deviceName,
+                $deviceManufactur,
+                $deviceModel,
+                $deviceSDK,
+                $deviceProduct,
+                $deviceOsVersion,
+                $deviceBoard,
+                $deviceBrand,
+                $deviceDisplay,
+                $deviceHardware,
+                $deviceHost,
+                $deviceType,
+                $deviceImei,
+                $deviceLat,
+                $deviceLong 
     ){
         $stmt = $this->conn->prepare("INSERT INTO tbl_device(
-            id_user,
-            androidId,
-            device,
-            deviceId,
-            deviceType,
-            deviceModel,
-            deviceManufactur,
-            deviceVersionSDK,
-            deviceProduct,
-            deviceHost,
-            imei,
-            locationLat,
-            locationLong
-            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("sssssssssssss", 
-                                    $userId,
-                                    $androidId,
-                                    $device,
-                                    $deviceId,
-                                    $deviceType,
-                                    $deviceModel,
-                                    $deviceManufactur,
-                                    $deviceVersionSDK,
-                                    $deviceProduct,
-                                    $deviceHost,
-                                    $imei,
-                                    $lat,
-                                    $long
+                userId,
+                deviceId,
+                deviceOsType,
+                deviceName,
+                deviceManufactur,
+                deviceModel,
+                deviceSDK,
+                deviceProduct,
+                deviceOsVersion,
+                deviceBoard,
+                deviceBrand,
+                deviceDisplay,
+                deviceHardware,
+                deviceHost,
+                deviceType,
+                deviceImei,
+                deviceLat,
+                deviceLong 
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssssssssssssssss", 
+                                            $userId,
+                                            $deviceId,
+                                            $deviceOsType,
+                                            $deviceName,
+                                            $deviceManufactur,
+                                            $deviceModel,
+                                            $deviceSDK,
+                                            $deviceProduct,
+                                            $deviceOsVersion,
+                                            $deviceBoard,
+                                            $deviceBrand,
+                                            $deviceDisplay,
+                                            $deviceHardware,
+                                            $deviceHost,
+                                            $deviceType,
+                                            $deviceImei,
+                                            $deviceLat,
+                                            $deviceLong
                                     );
         $result = $stmt->execute();
         $stmt->close();
@@ -396,49 +411,65 @@ class DB_Functions {
     //update device
 
     public function updateDevice(
-        $androidId,
-            $device,
-            $deviceId,
-            $deviceType,
-            $deviceModel,
-            $deviceManufactur,
-            $deviceVersionSDK,
-            $deviceProduct,
-            $deviceHost,
-            $imei,
-            $lat,
-            $long,
-            $userId
+                $userId,
+                $deviceId,
+                $deviceOsType,
+                $deviceName,
+                $deviceManufactur,
+                $deviceModel,
+                $deviceSDK,
+                $deviceProduct,
+                $deviceOsVersion,
+                $deviceBoard,
+                $deviceBrand,
+                $deviceDisplay,
+                $deviceHardware,
+                $deviceHost,
+                $deviceType,
+                $deviceImei,
+                $deviceLat,
+                $deviceLong
     ){
         $stmt = $this->conn->prepare("UPDATE tbl_device SET
-            androidId= ?,
-            device = ?,
-            deviceType =?,
-            deviceModel = ?,
-            deviceManufactur=?,
-            deviceVersionSDK=?,
-            deviceProduct=?,
-            deviceHost=?,
-            imei=?,
-            locationLat=?,
-            locationLong=?,
-            id_user = ?
+            
+                userId = ?,
+                deviceOsType = ?,
+                deviceName = ?,
+                deviceManufactur = ?,
+                deviceModel = ?,
+                deviceSDK = ?,
+                deviceProduct = ?,
+                deviceOsVersion = ?,
+                deviceBoard = ?,
+                deviceBrand = ?,
+                deviceDisplay = ?,
+                deviceHardware = ?,
+                deviceHost = ?,
+                deviceType = ?,
+                deviceImei = ?,
+                deviceLat = ?,
+                deviceLong =?
             WHERE 
             deviceId = ?");
-        $stmt->bind_param("sssssssssssss", 
-                                    $androidId,
-                                    $device,
-                                    $deviceType,
-                                    $deviceModel,
-                                    $deviceManufactur,
-                                    $deviceVersionSDK,
-                                    $deviceProduct,
-                                    $deviceHost,
-                                    $imei,
-                                    $lat,
-                                    $long,
-                                    $userId,
-                                    $deviceId);
+        $stmt->bind_param("ssssssssssssssssss", 
+                                            $userId,
+                                            $deviceOsType,
+                                            $deviceName,
+                                            $deviceManufactur,
+                                            $deviceModel,
+                                            $deviceSDK,
+                                            $deviceProduct,
+                                            $deviceOsVersion,
+                                            $deviceBoard,
+                                            $deviceBrand,
+                                            $deviceDisplay,
+                                            $deviceHardware,
+                                            $deviceHost,
+                                            $deviceType,
+                                            $deviceImei,
+                                            $deviceLat,
+                                            $deviceLong,
+                                            $deviceId);
         $result = $stmt->execute();
         $stmt->close();
         if ($result) {

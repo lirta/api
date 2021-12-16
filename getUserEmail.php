@@ -7,7 +7,7 @@ $response = array("error" => FALSE);
  
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
-    // echo($email);
+    echo($email);
     $user = $db->getUser($email);
     if ($user) {
         // user ditemukan
