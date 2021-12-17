@@ -479,7 +479,27 @@ class DB_Functions {
             return false;
         }
     }
-
+    // update divice user & location
+     public function updateDeviceUser($userId, $deviceId, $deviceLat, $deviceLong){
+        $stmt = $this->conn->prepare("UPDATE tbl_device SET
+                                                            userId = ?,
+                                                            deviceLat = ?,
+                                                            deviceLong =?
+                                                        WHERE 
+                                                        deviceId = ?");
+$stmt->bind_param("ssss", 
+                        $userId,
+                        $deviceLat,
+                        $deviceLong,
+                        $deviceId);
+         $result=$stmt->execute();
+         $stmt->close();
+         if ($result) {
+             return true;
+         }else{
+             return false;
+         }
+     }
 
     //login with google
 
