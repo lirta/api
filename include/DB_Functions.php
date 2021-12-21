@@ -487,17 +487,17 @@ class DB_Functions {
                                                             deviceLong =?
                                                         WHERE 
                                                         deviceId = ?");
-$stmt->bind_param("ssss", 
-                        $userId,
-                        $deviceLat,
-                        $deviceLong,
-                        $deviceId);
-         $result=$stmt->execute();
-         $stmt->close();
-         if ($result) {
-             return true;
-         }else{
-             return false;
+        $stmt->bind_param("ssss", 
+                                $userId,
+                                $deviceLat,
+                                $deviceLong,
+                                $deviceId);
+                $result=$stmt->execute();
+                $stmt->close();
+                if ($result) {
+                    return true;
+                }else{
+                    return false;
          }
      }
 
@@ -538,6 +538,41 @@ $stmt->bind_param("ssss",
             } else {
                 return NULL;
             }
+    }
+
+
+    public function cekEmailApple($email, $name, $gambar){
+        $stmt = $this->conn->prepare("SELECT*FROM tbl_user WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        if ($stmt->execute()) {
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        }else{
+            return null;
+        }
+    }
+
+
+    public function apple($email, $name, $gambar){
+        $uuid = uniqid('', true);
+        $stmt = $this->conn->prepare("INSERT INTO tbl_user(unique_id, name, username, email, gambar) VALUES(?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $uuid, $name, $email, $email, $gambar);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        if ($result) {
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $user = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            return $user;
+        } else {
+            return NULL;
+        }
     }
 
 
