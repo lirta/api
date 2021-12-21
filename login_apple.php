@@ -11,7 +11,6 @@ if (isset($_POST['email']) && isset($_POST['name'] )) {
     $name = $_POST['name'];
     $gambar = "default.jpg";
 
-    echo($email);
 
     $user = $db->cekEmailApple($email, $name, $gambar);
     if ($user != false) {
